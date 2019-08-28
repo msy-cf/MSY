@@ -1,0 +1,95 @@
+﻿@model mvcPRJ.Models.UserAccount
+
+@Scripts.Render("~/bundles/jquery")
+<script>
+
+    function disableAutocompleteUsername() {
+        var nameSelector;
+        
+        nameSelector = "data-name";
+        return document.querySelectorAll("form").forEach(function (form) {
+            if (form.getAttribute("autocomplete") === "new-username") {
+                form.querySelectorAll("input").forEach(function (input) {
+                    input.setAttribute(nameSelector, input.name);
+                    return input.name = "";
+                });
+                return form.addEventListener("submit", function () {
+                    return form.querySelectorAll("input").forEach(function (input) {
+                        return input.name = input.getAttribute(nameSelector);
+                    });
+                });
+            }
+        });
+    }
+
+</script>
+  <script>
+      function disableAutocompletePassword() {
+          var passwordSelector;
+          passwordSelector = "data-password";
+          return document.querySelectorAll("form").forEach(function (form) {
+              if (form.getAttribute("autocomplete") === "new-password") {
+                  form.querySelectorAll("input").forEach(function (input) {
+                      input.setAttribute(passwordSelector, input.password);
+                      return input.password = "";
+                  });
+                  return form.addEventListener("submit", function () {
+                      return form.querySelectorAll("input").forEach(function (input) {
+                          return input.password = input.getAttribute(passwordSelector);
+                      });
+                  });
+              }
+          });
+      }
+    
+    </script>
+      
+    
+
+
+
+
+
+
+@Scripts.Render("~/bundles/jqueryval")
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>UserAccount</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @onclick= "disableAutocompleteUsername()", @class = "form-control"  }   })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @onclick = "disableAutocompletePassword()", @class = "form-control"} })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" on-click="disableAutocompleteUsername()" class="btn btn-outline-danger"/>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
